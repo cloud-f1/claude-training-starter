@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings",
+  "description": "shorturl 專案的 Hook + 權限設定",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/protect-files.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write(src/**)",
+      "Edit(src/**)",
+      "Write(docs/**)",
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(npm run build)",
+      "Bash(npx tsc*)",
+      "Grep",
+      "Glob"
+    ],
+    "deny": [
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(CLAUDE.md)",
+      "Write(.claude/settings.json)",
+      "Bash(rm -rf *)",
+      "Bash(docker push*)",
+      "Bash(kubectl apply*)"
+    ]
+  }
+}

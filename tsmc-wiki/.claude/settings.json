@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings",
+  "description": "tsmc-wiki 專案的 Hook + 權限設定",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/capture-session.js"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write(notes/**)",
+      "Write(concepts/**)",
+      "Write(daily/**)",
+      "Edit(INDEX.md)",
+      "Grep",
+      "Glob",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Write(CLAUDE.md)",
+      "Write(decisions/**)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}
