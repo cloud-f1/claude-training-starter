@@ -270,12 +270,13 @@ claude
 
 > **維護守則**：這份手冊是活的。發現規範與現實衝突時，用 `[LEARN]` 標註讓 Alex 決定是否更新。
 >
-> 文件版本：v1.4
+> 文件版本：v1.5
 > 對應課綱：course-outline-two-level.md v4.0
 > 最後更新：2026-04-18
 > 維護者：Alex Hsieh｜Cloud Formula Digital Technology
 >
 > **變更紀錄**
+> - v1.5 (2026-04-18)：`windows-setup.ps1` 加三道防禦 — (a) here-string 改 `-f` 插值避免 `$OutputEncoding` 誤展開；(b) 不在 git repo 時警告跳過而非中斷；(c) PS 7+ 用 `utf8NoBOM` 一致化 PROFILE 編碼
 > - v1.4 (2026-04-18)：新增 `scripts/windows-setup.ps1` + README「一鍵環境設定」段；§9 對應 backlog 收斂
 > - v1.3 (2026-04-18)：新增 `scripts/smoke-test.sh`（A 靜態 50 項檢查 + B `--full` 行為驗證）；§5.2 改為先跑腳本、再手動驗證的雙層策略；§9 移除對應 backlog
 > - v1.2 (2026-04-18)：§4.1 修正 Hook 跨平台檢查規則（`.js` 或 `.sh`+`.bat` 二擇一）；刪除冗餘的 `tsmc-wiki/.claude/hooks/capture-session.bat`
