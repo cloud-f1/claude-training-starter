@@ -137,6 +137,17 @@ npm run format                        # Prettier 寫回
 
 ### 5.2 Maintainer Smoke Test（每次改動後必跑）
 
+**靜態檢查（快、每次都跑）**：
+
+```bash
+./scripts/smoke-test.sh              # A 模式，~10 秒
+./scripts/smoke-test.sh --full       # A + B：加 claude -p 行為驗證，~3-5 分鐘 + 耗 API
+```
+
+A 模式涵蓋：檔案結構、JSON parse、Hook 語法、Hook 單元測試（mock payload）、Skeleton 契約（§2.3）、70/30 placeholder 數量、frontmatter 齊全。B 模式加上 `npm test` 與 `claude -p "/project:wiki-add"` 的實際行為驗證。
+
+**手動行為驗證（release 前跑一次）**：
+
 ```bash
 # 1. Clone 乾淨環境
 git clone . /tmp/kit-smoke && cd /tmp/kit-smoke
@@ -239,7 +250,7 @@ claude
 
 | 項目 | 狀態 | 備註 |
 |---|---|---|
-| Smoke Test 自動化腳本 | ⏳ TODO | 目前只有人工步驟（§5.1），未來可寫 `scripts/smoke-test.sh` |
+| Smoke Test 自動化腳本 | ✅ v1.3 | `scripts/smoke-test.sh`（A 靜態 + B `--full` 行為驗證）|
 | Windows PowerShell Profile 範本 | ⏳ TODO | 課綱 Phase 2 提到 UTF-8 設定，目前靠講師現場協助 |
 | Starter Kit 影片教學 | ⏳ TODO | 配合課程 M0 使用 |
 | Remote repo | ⏳ 未建立 | 建議路徑 `cloud-f1/claude-training-starter` |
@@ -259,12 +270,13 @@ claude
 
 > **維護守則**：這份手冊是活的。發現規範與現實衝突時，用 `[LEARN]` 標註讓 Alex 決定是否更新。
 >
-> 文件版本：v1.2
+> 文件版本：v1.3
 > 對應課綱：course-outline-two-level.md v4.0
 > 最後更新：2026-04-18
 > 維護者：Alex Hsieh｜Cloud Formula Digital Technology
 >
 > **變更紀錄**
+> - v1.3 (2026-04-18)：新增 `scripts/smoke-test.sh`（A 靜態 50 項檢查 + B `--full` 行為驗證）；§5.2 改為先跑腳本、再手動驗證的雙層策略；§9 移除對應 backlog
 > - v1.2 (2026-04-18)：§4.1 修正 Hook 跨平台檢查規則（`.js` 或 `.sh`+`.bat` 二擇一）；刪除冗餘的 `tsmc-wiki/.claude/hooks/capture-session.bat`
 > - v1.1 (2026-04-17)：§3 加入 skeleton 警告區、新增 §5.1 常用開發指令、§5.2 Smoke Test 明確化 `npm install` 步驟
 > - v1.0 (2026-04-17)：初版
