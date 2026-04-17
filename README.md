@@ -137,6 +137,16 @@ claude-training-starter/
 
 ## Windows 特別說明
 
+### 一鍵環境設定
+
+Windows 學員第一次打開專案前，先跑：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows-setup.ps1
+```
+
+會處理：PowerShell 永久設為 UTF-8（避免繁中亂碼）、Git CRLF 與中文檔名設定（僅影響此 repo）。Idempotent — 重跑不會重覆寫入。
+
 ### Hook 腳本
 
 本 Kit 同時提供兩版 Hook 腳本：
