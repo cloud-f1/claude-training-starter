@@ -74,6 +74,12 @@ claude-training-starter/
         └── settings.json
 ```
 
+> ⚠️ **Skeleton 檔案（刻意不完整，見 §2.3）**：
+> - `shorturl/.claude/agents/backend-agent.md`
+> - `shorturl/.claude/agents/test-agent.md`
+>
+> 這兩個檔案是 M5 的學員產出，**Kit 維護者不得補完**。
+
 ### 3.1 三層 CLAUDE.md 各自的職責
 
 | 位置 | 讀者 | 職責 |
@@ -101,7 +107,7 @@ Kit 的版本號必須**追隨 `course-outline-two-level.md` 的版本**。
 - [ ] 設計 70/30 預填 / 修改點
 - [ ] 子專案 CLAUDE.md 只含 ≤3 個 `[YOUR_*]` placeholder
 - [ ] `.claude/` 結構完整：commands / skills / agents / hooks / settings.json
-- [ ] Hooks 雙平台（`.sh` + `.bat`）
+- [ ] Hooks 跨平台：採 `.js`（Node 自身跨平台，settings.json 直呼 `node`）**或** `.sh` + `.bat`（純 shell 腳本時才需雙版本）
 - [ ] `README.md` 的「專案結構」與「模組對應」表格同步更新
 - [ ] 本 CLAUDE.md §3 的結構圖同步更新
 
@@ -111,20 +117,40 @@ Kit 的版本號必須**追隨 `course-outline-two-level.md` 的版本**。
 
 這是教學基礎設施，**不是跑單元測試就算完成**。真正的驗收是：「一位工程師能否在 6 小時內靠這份 Kit 完成課程」。
 
-### 5.1 Maintainer Smoke Test（每次改動後必跑）
+### 5.1 常用開發指令
+
+`shorturl/` 是 Kit 內唯一有 build system 的子專案（tsmc-wiki 是純 Markdown，無 build / test）。
+
+```bash
+cd shorturl
+npm install                           # 首次執行必跑
+
+npm test                              # 全部測試（Jest）
+npm test -- urls.test.ts              # 單一檔案
+npm test -- --testNamePattern="POST"  # 依測試名稱過濾
+
+npm run dev                           # ts-node-dev 開發伺服器（熱重載）
+npm run build                         # tsc 輸出到 dist/
+npm run lint                          # ESLint 檢查 src/**/*.ts
+npm run format                        # Prettier 寫回
+```
+
+### 5.2 Maintainer Smoke Test（每次改動後必跑）
 
 ```bash
 # 1. Clone 乾淨環境
 git clone . /tmp/kit-smoke && cd /tmp/kit-smoke
 
-# 2. tsmc-wiki 側
+# 2. tsmc-wiki 側（無需 npm install — 純 Markdown 專案）
 cd tsmc-wiki
 claude
 # 輸入：/project:wiki-add 測試一則筆記
 # 預期：notes/ 新增一份檔案、INDEX.md 更新、Stop Hook 觸發 daily/*-session.md
 
-# 3. shorturl 側
-cd ../shorturl && npm install
+# 3. shorturl 側（必須先 npm install）
+cd ../shorturl
+npm install                           # ← 缺這步下方指令會失敗
+npm test                              # 確認骨架測試可跑
 claude
 # 輸入：幫我寫 POST /v1/urls 的骨架
 # 預期：套用 api-design + url-validation Skill 的規範
@@ -134,7 +160,7 @@ claude
 # 預期：PreToolUse Hook 以 exit 2 阻擋
 ```
 
-### 5.2 半年一次的 Learner Replay
+### 5.3 半年一次的 Learner Replay
 
 找一位沒碰過 Claude Code 的工程師（或課程學員），讓他實際跑一次 M0–M6。卡住的點就是 Kit 的下一版 backlog。
 
@@ -233,7 +259,12 @@ claude
 
 > **維護守則**：這份手冊是活的。發現規範與現實衝突時，用 `[LEARN]` 標註讓 Alex 決定是否更新。
 >
-> 文件版本：v1.0
+> 文件版本：v1.2
 > 對應課綱：course-outline-two-level.md v4.0
-> 最後更新：2026-04-17
+> 最後更新：2026-04-18
 > 維護者：Alex Hsieh｜Cloud Formula Digital Technology
+>
+> **變更紀錄**
+> - v1.2 (2026-04-18)：§4.1 修正 Hook 跨平台檢查規則（`.js` 或 `.sh`+`.bat` 二擇一）；刪除冗餘的 `tsmc-wiki/.claude/hooks/capture-session.bat`
+> - v1.1 (2026-04-17)：§3 加入 skeleton 警告區、新增 §5.1 常用開發指令、§5.2 Smoke Test 明確化 `npm install` 步驟
+> - v1.0 (2026-04-17)：初版
