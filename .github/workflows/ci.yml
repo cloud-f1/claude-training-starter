@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  smoke:
+    name: Kit smoke test (static)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run smoke test (A mode)
+        run: ./scripts/smoke-test.sh
+
+  shorturl:
+    name: shorturl deps + conditional type-check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shorturl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Type-check (skip on empty src)
+        # Kit ships with an empty src/ by design (see root CLAUDE.md §2.3).
+        # Once learners add .ts files, CI will automatically run tsc.
+        run: |
+          if find src -name "*.ts" -type f | grep -q .; then
+            npx tsc --noEmit
+          else
+            echo "skip: src/ is empty (Kit skeleton state)"
+          fi
