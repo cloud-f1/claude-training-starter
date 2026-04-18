@@ -60,17 +60,19 @@ cd tsmc-wiki
 cd shorturl
 ```
 
-### Step 3 — 修改 CLAUDE.md 的 3 個地方
+### Step 3 — 修改 CLAUDE.md 的 placeholder
 
 打開 `CLAUDE.md`，尋找 `[YOUR_*]` 標記，填入你自己的資訊：
 
+- **`tsmc-wiki/CLAUDE.md`**：2 處（研究焦點、維護者）
+- **`shorturl/CLAUDE.md`**：3 處（擁有者、部署環境、預期流量）
+
+例（tsmc-wiki）：
+
 ```markdown
-## 專案背景
+## 1. 專案背景
 研究焦點：[YOUR_FOCUS_AREA]        ← 改這裡
 維護者：[YOUR_NAME]                 ← 改這裡
-
-## 標籤
-主要標籤：[YOUR_TAGS]               ← 改這裡
 ```
 
 ### Step 4 — 啟動 Claude Code

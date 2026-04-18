@@ -110,16 +110,15 @@ check "bash -n protect-files.sh" $?
 echo
 echo "▸ Hook 單元測試"
 # protect-files 應該對 .env 回 exit 2
-set +e
 echo '{"tool_name":"Write","tool_input":{"file_path":"shorturl/.env"}}' \
   | bash shorturl/.claude/hooks/protect-files.sh 2>/dev/null
-[[ $? -eq 2 ]]; check "protect-files 擋下 .env (exit 2)" $?
+rc=$?
+[[ "$rc" -eq 2 ]]; check "protect-files 擋下 .env (exit 2)" $? "實際 exit=$rc"
 # 對無關檔案應 exit 0
 echo '{"tool_name":"Write","tool_input":{"file_path":"shorturl/src/api/server.ts"}}' \
   | bash shorturl/.claude/hooks/protect-files.sh 2>/dev/null
-[[ $? -eq 0 ]]; check "protect-files 放行一般檔案 (exit 0)" $?
-set -e 2>/dev/null || true
-set -u
+rc=$?
+[[ "$rc" -eq 0 ]]; check "protect-files 放行一般檔案 (exit 0)" $? "實際 exit=$rc"
 
 # ── A5: Skeleton 契約（§2.3）────────────────────────
 echo

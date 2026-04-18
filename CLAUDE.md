@@ -250,9 +250,10 @@ claude
 
 | 項目 | 狀態 | 備註 |
 |---|---|---|
-| Smoke Test 自動化腳本 | ✅ v1.3 | `scripts/smoke-test.sh`（A 靜態 50 項 + B `--full` 行為驗證）|
-| Windows PowerShell Profile 範本 | ✅ v1.5 | `scripts/windows-setup.ps1` — UTF-8 + git core.autocrlf/quotepath（idempotent，含三道防禦；待 Windows 實測）|
-| Remote repo | ✅ v1.2 | `cloud-f1/claude-training-starter` 已建立並 push（public, SSH）|
+| Smoke Test 自動化腳本 | ✅ shipped in v1.3 | `scripts/smoke-test.sh`（A 靜態 50 項 + B `--full` 行為驗證）|
+| Windows PowerShell Profile 範本 | ✅ shipped in v1.5 | `scripts/windows-setup.ps1` — UTF-8 + git core.autocrlf/quotepath（idempotent，含三道防禦；待 Windows 實測）|
+| GitHub Actions CI | ✅ shipped in v1.7 | `.github/workflows/ci.yml` — smoke + shorturl 兩個 job，`npm ci` 確定性安裝 |
+| Remote repo | ✅ shipped in v1.2 | `cloud-f1/claude-training-starter` 已建立並 push（public, SSH）|
 | Starter Kit 影片教學 | 🟢 暫緩 | 非 code 任務；建議下次課程跑完一輪後再拍（有實際學員卡點可當教材）|
 
 ---
@@ -270,12 +271,13 @@ claude
 
 > **維護守則**：這份手冊是活的。發現規範與現實衝突時，用 `[LEARN]` 標註讓 Alex 決定是否更新。
 >
-> 文件版本：v1.6
+> 文件版本：v1.7
 > 對應課綱：course-outline-two-level.md v4.0
 > 最後更新：2026-04-18
 > 維護者：Alex Hsieh｜Cloud Formula Digital Technology
 >
 > **變更紀錄**
+> - v1.7 (2026-04-18)：Code review 後一輪修復 — (a) `protect-files.sh` 去除 python3 依賴改用 node（與 Kit 其他 Hook 一致）；(b) `smoke-test.sh` 移除 cargo-culted `set -e/+e` 並顯式捕獲 `$?`；(c) CI 切換 `npm ci` + `package-lock.json` 確定性安裝；(d) CI 加 `permissions: contents: read`；(e) README §Step 3 修正「3 處 placeholder」誤導（實際是 tsmc-wiki 2 處 / shorturl 3 處）；(f) §9 wording 統一為 "shipped in vX.Y"；新增 GitHub Actions CI 條目
 > - v1.6 (2026-04-18)：§9 backlog 四項全部收斂（Smoke Test / Windows Profile / Remote repo 標 done；影片教學改為「暫緩」並附理由）
 > - v1.5 (2026-04-18)：`windows-setup.ps1` 加三道防禦 — (a) here-string 改 `-f` 插值避免 `$OutputEncoding` 誤展開；(b) 不在 git repo 時警告跳過而非中斷；(c) PS 7+ 用 `utf8NoBOM` 一致化 PROFILE 編碼
 > - v1.4 (2026-04-18)：新增 `scripts/windows-setup.ps1` + README「一鍵環境設定」段；§9 對應 backlog 收斂

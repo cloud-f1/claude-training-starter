@@ -10,16 +10,23 @@ set -euo pipefail
 
 INPUT=$(cat)
 
-# 從 stdin JSON 抓出檔案路徑
+# 依賴檢查：node 已是 Kit 必備（shorturl 用 Node v20+、tsmc-wiki Hook 也用 node）
+if ! command -v node >/dev/null 2>&1; then
+  echo "⚠️  protect-files Hook 需要 node，但 PATH 中找不到；放行。" >&2
+  exit 0
+fi
+
+# 從 stdin JSON 抓出檔案路徑（改用 node 取代 python3，與 Kit 其他 Hook 一致）
 # PreToolUse payload: { "tool_name": "Write", "tool_input": { "file_path": "..." } }
-FILE_PATH=$(echo "$INPUT" | python3 -c "
-import sys, json
-try:
-    d = json.load(sys.stdin)
-    print(d.get('tool_input', {}).get('file_path', '') or d.get('tool_input', {}).get('path', ''))
-except Exception:
-    print('')
-")
+FILE_PATH=$(echo "$INPUT" | node -e '
+let s = ""; process.stdin.on("data", c => s += c); process.stdin.on("end", () => {
+  try {
+    const d = JSON.parse(s);
+    const ti = d.tool_input || {};
+    process.stdout.write(ti.file_path || ti.path || "");
+  } catch { process.stdout.write(""); }
+});
+')
 
 # 空路徑 → 放行（可能是其他工具）
 if [ -z "$FILE_PATH" ]; then
